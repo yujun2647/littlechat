@@ -2,7 +2,8 @@ import traceback
 from typing import *
 
 import time
-from queue import Empty
+import logging
+from queue import Empty, Queue
 from threading import Lock
 
 import urwid
@@ -326,9 +327,7 @@ class MainPage(urwid.Columns):
 
 
 if __name__ == "__main__":
-    import logging
     from lchat.utils.util_log import set_scripts_logging
-    from queue import Queue
 
     logger = logging.getLogger("client")
 

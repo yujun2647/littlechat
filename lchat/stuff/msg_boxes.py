@@ -104,6 +104,17 @@ class UserHeartbeat(ClientMsg):
         super().__init__(username=username, msg="heartbeat")
 
 
+class ConCheck(ClientMsg):
+    def __init__(self):
+        super().__init__(username="conCheck", msg="conCheck")
+
+    def get_response_msg(self):
+        return self
+
+    def get_broadcast_msg(self):
+        pass
+
+
 class NewUser(ClientMsg):
     EXPIRE_SECONDS = 3
 

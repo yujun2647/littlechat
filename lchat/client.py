@@ -63,10 +63,11 @@ class Client(object):
         if not isinstance(msg, UserHeartbeat):
             logger.info(f"msg length2: {len(msg_byte)}")
 
-    def recv_server_msg(self):
+    def recv_server_msg(self, timeout=0.5):
+        self.udp_socket.settimeout(timeout)
         response, addr = self.udp_socket.recvfrom(MsgConfig.MSG_LENGTH)
         rsp: MsgBox = pickle.loads(response)
-        print(rsp.msg, addr)
+
         return rsp
 
     @new_thread
@@ -77,9 +78,7 @@ class Client(object):
                 return
             # noinspection PyBroadException
             try:
-                ready = select.select([self.udp_socket], [], [], 0.5)
-                if not ready[0]:
-                    continue
+                self.udp_socket.settimeout(0.5)
                 response, addr = self.udp_socket.recvfrom(MsgConfig.MSG_LENGTH)
                 recv_msg_box: MsgBox = pickle.loads(response)
                 self.front_main_page.show_msg(recv_msg_box, is_self=False)
@@ -97,7 +96,7 @@ class Client(object):
             try:
                 logger.info("tset in sending_msg_proxy")
                 msg, addr = self.sending_msg_q.get(timeout=0.5)
-                #logger.info(f"send msg proxy, msg length: {len(msg)}")
+                # logger.info(f"send msg proxy, msg length: {len(msg)}")
                 if not msg:
                     continue
                 self.udp_socket.sendto(msg, addr)
@@ -130,22 +129,29 @@ class Client(object):
             username = username.strip()
             if not username:
                 continue
-            self.send_msg(NewUser(username=username))
-            rsp = self.recv_server_msg()
+            self.send_msg(NewUser(username=username), direct=True)
+            rsp: MsgBox = self.recv_server_msg()
+            print(rsp.msg)
             if not isinstance(rsp, ExceptionMsg):
                 self.username = username
                 self._init_front_main_page()
                 break
-            print(rsp.msg)
+
+    def check_con(self):
+        self.send_msg(ConCheck(), direct=True)
+        # expect socket.timeout exception if no response
+        self.recv_server_msg(timeout=1)
 
     def contact(self):
         self.sending_msg_proxy()
         try:
+            self.check_con()
             self.login()
             self.receiving_server_msg()
-
             self.keep_sending_heartbeat()
             self.start_page_loop()
+        except socket.timeout:
+            print(f"server: {self.host}:{self.port} is not reachable !!!")
         except KeyboardInterrupt:
             self.close()
         finally:
@@ -154,11 +160,14 @@ class Client(object):
     def close(self):
         if not self.is_closed and self.username:
             self.send_msg(UserOffline(username=self.username), direct=True)
-            self.front_main_page.close()
+            if self.front_main_page:
+                self.front_main_page.close()
+            if self.page_loop:
+                self.page_loop.stop()
             self.udp_socket.close()
-            self.page_loop.stop()
-            self.is_closed = True
             print(F"\nBYE BYE, {self.username}")
+
+        self.is_closed = True
 
     def __del__(self):
         self.close()
