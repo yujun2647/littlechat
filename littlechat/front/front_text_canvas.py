@@ -10,7 +10,7 @@ from urwid.util import (
     trim_text_attr_cs,
 )
 
-from lchat.front.front_text_layout import FrontTextLayout
+from littlechat.front.front_text_layout import FrontTextLayout
 
 
 class FrontTextCanvas(TextCanvas):

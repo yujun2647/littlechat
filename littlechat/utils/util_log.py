@@ -1,7 +1,7 @@
 import sys
 import logging
 from logging.handlers import RotatingFileHandler
-from lchat.utils.util_path import get_log_path
+from littlechat.utils.util_path import get_log_path
 
 
 def set_scripts_logging(_file_, logger=None, level=logging.DEBUG,
@@ -22,11 +22,11 @@ def set_scripts_logging(_file_, logger=None, level=logging.DEBUG,
     if logger is None:
         logger = logging.getLogger()
     # 解除第三方 logger 广播日志
-    for logger_name, logger in logger.manager.loggerDict.items():
-        if (isinstance(logger, logging.Logger)
+    for logger_name, _logger in logger.manager.loggerDict.items():
+        if (isinstance(_logger, logging.Logger)
                 and logger_name != logger.name
-                and logger.parent.name == logger.name):
-            logger.propagate = False
+                and _logger.parent.name == logger.name):
+            _logger.propagate = False
     if logger.handlers:  # 防止有多个 handler
         logger.handlers.clear()
     if console_log:

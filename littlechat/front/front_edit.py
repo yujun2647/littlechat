@@ -1,8 +1,8 @@
 import urwid
 from urwid import CompositeCanvas
 
-from lchat.front.front_text import FrontText, apply_text_layout
-from lchat.front import front_text_layout as text_layout
+from littlechat.front.front_text import FrontText, apply_text_layout
+from littlechat.front import front_text_layout as text_layout
 
 
 class FrontEdit(urwid.Edit):

@@ -2,7 +2,7 @@ import os
 import json
 from threading import Lock
 
-from lchat.utils.util_path import get_cache_data_filepath
+from littlechat.utils.util_path import get_cache_data_filepath
 
 EMOJIS = {
     "People": [

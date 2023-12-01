@@ -5,8 +5,8 @@ from urwid import WHSettings, WrapMode, TextCanvas, Align
 from urwid.util import *
 from urwid.text_layout import *
 
-from lchat.front.front_text_layout import FrontTextLayout
-from lchat.front.front_text_canvas import FrontTextCanvas
+from littlechat.front.front_text_layout import FrontTextLayout
+from littlechat.front.front_text_canvas import FrontTextCanvas
 
 logger = logging.getLogger("client")
 

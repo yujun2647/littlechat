@@ -1,9 +1,9 @@
 import urwid
 from urwid import WHSettings
 
-from lchat.stuff.msg_boxes import MsgBox, ServerMsg, UserDict
-from lchat.front.front_config import Palette
-from lchat.front.front_text import FrontText
+from littlechat.stuff.msg_boxes import MsgBox, ServerMsg, UserDict
+from littlechat.front.front_config import Palette
+from littlechat.front.front_text import FrontText
 
 
 class FrontMsg(object):
@@ -71,7 +71,7 @@ class FrontMsg(object):
 
 
 if __name__ == "__main__":
-    from lchat.stuff.msg_boxes import UserMsg
+    from littlechat.stuff.msg_boxes import UserMsg
     from urwid import raw_display
 
     body = [urwid.Divider()]

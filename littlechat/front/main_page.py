@@ -9,15 +9,15 @@ from threading import Lock
 import urwid
 from urwid import WHSettings
 
-from lchat.stuff.msg_boxes import MsgBox, UserMsg, UserDict, TimeStamp
-from lchat.utils.util_thread import new_thread
-from lchat.stuff.errors import *
-from lchat.front.front_config import Palette
-from lchat.front.front_msg import FrontMsg
-from lchat.front.front_text_layout import FrontTextLayout
-from lchat.front.front_edit import FrontEdit
-from lchat.front.front_button import FrontButton
-from lchat.front.front_emojis import get_all_emojis, FavoriteEmoji
+from littlechat.stuff.msg_boxes import MsgBox, UserMsg, UserDict, TimeStamp
+from littlechat.utils.util_thread import new_thread
+from littlechat.stuff.errors import *
+from littlechat.front.front_config import Palette
+from littlechat.front.front_msg import FrontMsg
+from littlechat.front.front_text_layout import FrontTextLayout
+from littlechat.front.front_edit import FrontEdit
+from littlechat.front.front_button import FrontButton
+from littlechat.front.front_emojis import get_all_emojis, FavoriteEmoji
 
 
 class _EmojiColumn(urwid.Columns):
@@ -327,7 +327,7 @@ class MainPage(urwid.Columns):
 
 
 if __name__ == "__main__":
-    from lchat.utils.util_log import set_scripts_logging
+    from littlechat.utils.util_log import set_scripts_logging
 
     logger = logging.getLogger("client")
 

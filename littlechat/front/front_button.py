@@ -4,9 +4,9 @@ from urwid import Button, Columns, SelectableIcon, WHSettings, Align, WrapMode, 
 from urwid.signals import connect_signal
 from urwid.canvas import CompositeCanvas
 
-from lchat.front.front_emojis import get_all_emojis
-from lchat.front.front_text_layout import FrontTextLayout
-from lchat.front.front_text import FrontText, apply_text_layout
+from littlechat.front.front_emojis import get_all_emojis
+from littlechat.front.front_text_layout import FrontTextLayout
+from littlechat.front.front_text import FrontText, apply_text_layout
 
 
 class FixSelectableIcon(FrontText):

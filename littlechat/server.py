@@ -1,21 +1,51 @@
+import os
+import json
+import logging
 import pickle
 import socket as soc
 from queue import Queue, Empty
 
-from lchat.stuff.msg_boxes import *
-from lchat.utils.util_thread import new_thread
-from lchat.stuff.config import MsgConfig
+from littlechat.stuff.msg_boxes import *
+from littlechat.utils.util_thread import new_thread
+from littlechat.stuff.config import MsgConfig
+from littlechat.utils.util_path import get_cache_data_filepath
+
+logger = logging.getLogger("server")
 
 
 class Server(object):
+    _LAST_SERVER_FILE = get_cache_data_filepath(filename="last_server.json")
+    _LAST_SERVER = {}
+    DEFAULT_PORT = 12345
 
-    def __init__(self, port=12345):
+    def __init__(self, port=""):
+        self._load_last_server()
+        self.port = port
+        self._check_last_server()
+        self.local_addr = ("0.0.0.0", self.port)
+
         self.udp_socket = soc.socket(soc.AF_INET, soc.SOCK_DGRAM)
-        self.local_addr = ('0.0.0.0', port)
         self.udp_socket.bind(self.local_addr)
         self.client_heartbeat_q = Queue()
         self.sending_msg_queue = Queue()
         self.is_close = False
+
+    def _load_last_server(self):
+        if not os.path.exists(self._LAST_SERVER_FILE):
+            return
+        with open(self._LAST_SERVER_FILE, "r") as fp:
+            self._LAST_SERVER = json.load(fp)
+
+    def _check_last_server(self):
+        last_port = self._LAST_SERVER.get("port", self.DEFAULT_PORT)
+        if not self.port:
+            self.port = last_port
+            return
+
+    def _update_last_server(self):
+        with open(self._LAST_SERVER_FILE, "w") as fp:
+            self._LAST_SERVER["port"] = self.port
+            json.dump(self._LAST_SERVER, fp)
 
     def broadcast_expired_users(self, expired_users):
         if not expired_users:
@@ -48,7 +78,7 @@ class Server(object):
                 pass
             expired_users = NewUser.check_and_clear_expired_users()
             for user in expired_users:
-                print(f"user: {user.username} exit")
+                logger.info(f"user: {user.username} exit")
 
             if expired_users:
                 self.broadcast_expired_users(expired_users)
@@ -68,7 +98,9 @@ class Server(object):
     def serve(self):
         self.client_alive_check()
         self.sending_msg_proxy()
+        self._update_last_server()
         # self.keep_check_user_dict()
+        logger.info(f"-----server in {self.local_addr}---------")
         while True:
             recv_data, addr = self.udp_socket.recvfrom(MsgConfig.MSG_LENGTH)
             # noinspection PyBroadException
@@ -124,5 +156,13 @@ class Server(object):
         self.udp_socket.close()
 
 
+def server(port=""):
+    from littlechat.utils.util_log import set_scripts_logging
+
+    set_scripts_logging(__file__, logger=logger, level=logging.DEBUG,
+                        console_log=True, file_mode="a")
+    Server(port=port).serve()
+
+
 if __name__ == "__main__":
-    Server(port=12345).serve()
+    server()

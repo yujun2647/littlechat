@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 HOME_PATH = os.path.expanduser('~')
 
-PROJECT_NAME = "little_chat"
+PROJECT_NAME = "littlechat"
 
 
 def ensure_dir_exist(dir_path):
@@ -70,10 +70,13 @@ def raise_error_if_not_exists(filepaths):
 
 
 def get_cache_data_dir(folder: str):
-    return join_ensure_exist(PROJECT_CACHE_PATH, folder)
+    return (join_ensure_exist(PROJECT_CACHE_PATH, folder) if folder
+            else PROJECT_CACHE_PATH)
 
 
-def get_cache_data_filepath(folder: str, filename: str):
+def get_cache_data_filepath(folder: str = "", filename: str = ""):
+    if not filename:
+        raise ValueError("filename is not allow to be empty !!!")
     return join_ensure_exist(get_cache_data_dir(folder), filename)
 
 

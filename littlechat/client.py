@@ -1,4 +1,5 @@
-import select
+import json
+import os
 import logging
 import pickle
 import socket
@@ -6,12 +7,13 @@ import traceback
 
 from queue import Queue, Empty
 
-from lchat.stuff.msg_boxes import *
-from lchat.stuff.errors import *
-from lchat.stuff.config import MsgConfig
-from lchat.front.main_page import MainPage
-from lchat.front.front_config import Palette
-from lchat.utils.util_thread import new_thread
+from littlechat.stuff.msg_boxes import *
+from littlechat.stuff.errors import *
+from littlechat.stuff.config import MsgConfig
+from littlechat.front.main_page import MainPage
+from littlechat.front.front_config import Palette
+from littlechat.utils.util_thread import new_thread
+from littlechat.utils.util_path import get_cache_data_filepath
 
 import urwid
 
@@ -19,11 +21,37 @@ logger = logging.getLogger("client")
 
 
 class Client(object):
+    _LAST_CLIENT_FILE = get_cache_data_filepath(filename="last_client.json")
+    _LAST_CLIENT = {}
+
+    def _load_last_client(self):
+        if not os.path.exists(self._LAST_CLIENT_FILE):
+            return
+        with open(self._LAST_CLIENT_FILE, "r") as fp:
+            self._LAST_CLIENT = json.load(fp)
+
+    def _check_last_client(self):
+        if not self._LAST_CLIENT:
+            pass
+        if not self.host:
+            self.host = self._LAST_CLIENT["host"]
+        if not self.port:
+            self.port = self._LAST_CLIENT["port"]
+
+        self._LAST_CLIENT["host"] = self.host
+        self._LAST_CLIENT["port"] = self.port
+
+    def _cache_this_client(self):
+        with open(self._LAST_CLIENT_FILE, "w") as fp:
+            json.dump(self._LAST_CLIENT, fp)
 
     def __init__(self, host, port):
+        self._load_last_client()
         self.host = host
         self.port = port
+        self._check_last_client()
         self.username = None
+
         # socket.SOCK_DGRAM - udp
         self.udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sending_msg_q = Queue()
@@ -135,6 +163,7 @@ class Client(object):
             if not isinstance(rsp, ExceptionMsg):
                 self.username = username
                 self._init_front_main_page()
+                self._cache_this_client()
                 break
 
     def check_con(self):
@@ -173,9 +202,13 @@ class Client(object):
         self.close()
 
 
-if __name__ == '__main__':
-    from lchat.utils.util_log import set_scripts_logging
+def client(host, port):
+    from littlechat.utils.util_log import set_scripts_logging
 
     set_scripts_logging(__file__, logger=logger, level=logging.DEBUG,
-                        console_log=False, file_mode="w")
-    Client("0.0.0.0", 12345).contact()
+                        console_log=False, file_mode="a")
+    Client(host, port).contact()
+
+
+if __name__ == '__main__':
+    client("0.0.0,0", port=12345)

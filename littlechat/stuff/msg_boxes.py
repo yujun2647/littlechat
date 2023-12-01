@@ -1,3 +1,4 @@
+import logging
 import time
 from typing import *
 from abc import ABC, abstractmethod
@@ -5,6 +6,8 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from copy import deepcopy
 from threading import Lock
+
+logger = logging.getLogger("server")
 
 
 class MsgBox(object):
@@ -138,7 +141,7 @@ class NewUser(ClientMsg):
                 new_user = NewUser(username)
                 new_user.ip, new_user.port = uhb.ip, uhb.port
                 NewUser.USER_DICT[username] = new_user
-                print(f"user {username} is back online !!")
+                logger.info(f"user {username} is back online !!")
 
     @classmethod
     def check_and_clear_expired_users(cls):
@@ -165,7 +168,8 @@ class NewUser(ClientMsg):
     def load_new_user(cls, msg: ClientMsg):
         if msg.username not in cls.USER_DICT:
             cls.USER_DICT[msg.username] = msg
-            print(f"user {msg.username} is online")
+            cls.USER_DICT[msg.username] = msg
+            logger.info(f"user {msg.username} is online")
 
     def is_user_exist(self):
         return self.username in NewUser.USER_DICT
