@@ -22,11 +22,11 @@ def set_scripts_logging(_file_, logger=None, level=logging.DEBUG,
     if logger is None:
         logger = logging.getLogger()
     # 解除第三方 logger 广播日志
-    for logger_name, _logger in logger.manager.loggerDict.items():
-        if (isinstance(_logger, logging.Logger)
-                and logger_name != logger.name
-                and _logger.parent.name == logger.name):
-            _logger.propagate = False
+    for log_name, _log in logger.manager.loggerDict.items():
+        if (isinstance(_log, logging.Logger)
+                and log_name != logger.name
+                and _log.parent.name == logger.name):
+            _log.propagate = False
     if logger.handlers:  # 防止有多个 handler
         logger.handlers.clear()
     if console_log:
