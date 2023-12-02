@@ -18,7 +18,7 @@ class Server(object):
     _LAST_SERVER = {}
     DEFAULT_PORT = 12345
 
-    def __init__(self, port=""):
+    def __init__(self, port=DEFAULT_PORT):
         self._load_last_server()
         self.port = port
         self._check_last_server()
@@ -156,7 +156,7 @@ class Server(object):
         self.udp_socket.close()
 
 
-def server(port=""):
+def server(port=12345):
     from littlechat.utils.util_log import set_scripts_logging
 
     set_scripts_logging(__file__, logger=logger, level=logging.DEBUG,

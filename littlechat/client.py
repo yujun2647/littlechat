@@ -167,9 +167,12 @@ class Client(object):
                 break
 
     def check_con(self):
-        self.send_msg(ConCheck(), direct=True)
-        # expect socket.timeout exception if no response
-        self.recv_server_msg(timeout=1)
+        try:
+            self.send_msg(ConCheck(), direct=True)
+            # expect socket.timeout exception if no response
+            self.recv_server_msg(timeout=1)
+        except Exception as exp:
+            raise ServerNotReachable(f"{exp}")
 
     def contact(self):
         self.sending_msg_proxy()
@@ -179,8 +182,8 @@ class Client(object):
             self.receiving_server_msg()
             self.keep_sending_heartbeat()
             self.start_page_loop()
-        except socket.timeout:
-            print(f"server: {self.host}:{self.port} is not reachable !!!")
+        except ServerNotReachable as exp:
+            print(f"server: {self.host}:{self.port} is not reachable !!!, exp: {exp}")
         except KeyboardInterrupt:
             self.close()
         finally:
@@ -211,4 +214,4 @@ def client(host, port):
 
 
 if __name__ == '__main__':
-    client("0.0.0,0", port=12345)
+    client("0.0.0.0", port=12345)
