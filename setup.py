@@ -55,7 +55,7 @@ setup(
     name="littlechat",
     version=__version__,
     description="chatroom base on udp, write in python",
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     install_requires=INSTALL_REQUIRES,
     url="",
     author="walkerjun",
