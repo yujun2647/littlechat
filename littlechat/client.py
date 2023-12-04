@@ -153,7 +153,7 @@ class Client(object):
 
     def login(self):
         while True:
-            username = input("请输入用户名：")
+            username = input("ENTER USERNAME：")
             username = username.strip()
             if not username:
                 continue
