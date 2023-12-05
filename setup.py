@@ -57,11 +57,11 @@ setup(
     description="chatroom base on udp, write in python",
     python_requires=">=3.7",
     install_requires=INSTALL_REQUIRES,
-    url="",
+    url="https://github.com/yujun2647/littlechat",
+    license='Apache-2.0',
     author="walkerjun",
     author_email="yujun2647@163.com",
     download_url="",
-
     entry_points={
         "console_scripts": [
             "lchat=littlechat.cli:main",
