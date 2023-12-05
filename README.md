@@ -1,17 +1,17 @@
 # littlechat
 
-## About
-
-A little chatroom run in console, write in python base
-on [`urwid`](https://github.com/urwid/urwid) and `UDP`,
-only support Linux, OSX, Cygwin or other unix-like OS, not support Windows
-
 ## Chat example
 
 * Chinese character example
   ![chat example](./imgs/client_page.png)
 * emoji example
   ![chat example](./imgs/client_page_emoji.png)
+
+## About
+
+A little chatroom run in console, write in python base
+on [`urwid`](https://github.com/urwid/urwid) and `UDP`,
+only support Linux, OSX, Cygwin or other unix-like OS, not support Windows
 
 ## Quick Start
 
