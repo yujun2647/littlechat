@@ -69,5 +69,6 @@ setup(
     },
     packages=all_packages,
     package_data=all_package_data,
+    data_files=[("requirements", ["requirements.txt"])],
     long_description=README,
 )
