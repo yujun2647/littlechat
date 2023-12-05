@@ -71,4 +71,5 @@ setup(
     package_data=all_package_data,
     data_files=[("requirements", ["requirements.txt"])],
     long_description=README,
+    long_description_content_type='text/markdown'
 )
