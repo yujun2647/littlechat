@@ -54,7 +54,11 @@ INSTALL_REQUIRES = _get_requires("requirements.txt")
 setup(
     name="littlechat",
     version=__version__,
-    description="chatroom base on udp, write in python",
+    description="A little chatroom run in console, write in python base on "
+                "[`urwid`](https://github.com/urwid/urwid) and `UDP`, "
+                "only support Linux, OSX, Cygwin or other unix-like OS, "
+                "not support Windows",
+    description_content_type='text/markdown',
     python_requires=">=3.7",
     install_requires=INSTALL_REQUIRES,
     url="https://github.com/yujun2647/littlechat",

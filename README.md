@@ -9,9 +9,9 @@ only support Linux, OSX, Cygwin or other unix-like OS, not support Windows
 ## Chat example
 
 * Chinese character example
-  ![chat example](./imgs/client_page.png)
+  ![chat example](https://github.com/yujun2647/littlechat/raw/main/imgs/client_page.png)
 * emoji example
-  ![chat example](./imgs/client_page_emoji.png)
+  ![emoji example](https://github.com/yujun2647/littlechat/raw/main/imgs/client_page_emoji.png)
 
 ## Quick Start
 
