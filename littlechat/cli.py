@@ -14,8 +14,8 @@ parser.add_argument("-sh", "--server-host",
                     help="choose server host the client is going to connect",
                     default="0.0.0.0", type=str)
 parser.add_argument("-sp", "--server-port",
-                    help="choose the port of the server",
-                    default=32898, type=int)
+                    help="choose the port of the server, default: 32898",
+                    default=0, type=int)
 
 parser.version = str(__version__)
 parser.add_argument('-v', action='version', help='print the version and exit')
