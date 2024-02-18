@@ -194,6 +194,8 @@ class FrontText(urwid.Text):
         text, attr = self.get_text()
 
         if size is not None:
+            if len(size) == 0:
+                size = (1, )
             (maxcol,) = size
             if not hasattr(self.layout, "pack"):
                 return size
